@@ -6,28 +6,35 @@ from sklearn.metrics.pairwise import linear_kernel
 import pickle
 
 
+# Data reading into pandas DataFrame
+data = pd.read_excel("imdb_data.xlsx")
 
-data=pd.read_excel("movie data_new.xlsx")
+# Basic info about the data
 data.info()
+
+# We rename some columns
 data.rename(columns={'Unnamed: 0': 'movie_id'}, inplace=True)
-data.rename(columns={'Movie Name': 'Title'}, inplace=True) # added BP
+data.rename(columns={'Movie Name': 'Title'}, inplace=True)
 
-columns=['Cast','Director','Genre','Title','Description']
+# Prepare a list of textual-data columns without null values
+columns=['Title', 'Genre', 'Director', 'Cast', 'Description']
 
+# Double check that those columns don't have nulls
+data[columns].isnull().values.any() # no null values
 
-data[columns].isnull().values.any()#no null values
-
+# Function to return the list of concatenated title, director, genre and description column
 def get_important_features(data):
     important_features=[]
-    for i in range (0,data.shape[0]):
-        important_features.append(data['Title'][i]+' '+data['Director'][i]+' '+data['Genre'][i]+' '+data['Description'][i])
+    for i in range (0, data.shape[0]):
+        important_features.append(data['Title'][i]+ ' ' + data['Director'][i]+ ' ' +
+                                  data['Genre'][i]+ ' ' + data['Description'][i])
     return important_features
 
 
-#creating a column to hold the combined strings
-data['important_features']=get_important_features(data)
+# Saving the concatenated columns as a new feature
+data['important_features'] = get_important_features(data)
 
-
+# We vectorize this feature using TfidfVectorizer to calculate similarity
 tfidf = TfidfVectorizer(stop_words='english')
 #data['Description'] = data['Description'].fillna('')
 tfidf_matrix = tfidf.fit_transform(data['important_features'])

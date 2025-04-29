@@ -84,4 +84,4 @@ for i in cast:
     cas.append(c)
    
 movie_list = pd.DataFrame({ "Title": movie_name, "Year of Release" : year, "Watch Time": time,"Genre":genre,"Movie Rating": rating, "Metascore of movie": metascore,"Director":director,"Cast":cas,"Votes" : votes,"Description": description})
-movie_list.to_excel("movie data_new1.xlsx")
+movie_list.to_excel("imdb_data.xlsx")
