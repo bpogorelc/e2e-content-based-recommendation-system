@@ -40,16 +40,25 @@ tfidf = TfidfVectorizer(stop_words='english')
 tfidf_matrix = tfidf.fit_transform(data['important_features'])
 tfidf_matrix.shape
 
-
+# Generating the cosine similrity matrix
 cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
 
+# We need to write a logic that takes a movie title as input and 
+# returns the top 5 most similar movies based on cosine similarity.
+
+ # For this, we can create a function that calculates the similarity
+ # score of our input with other movies in the corpus, then sort the 
+ # scores in descending order to get the top 5 movies with the 
+ # highest similarity scores. Here index 0 is discarded in 
+ # sim_scores variable so that the function does not return the 
+ # same movie that’s been entered in the input.
 
 indices = pd.Series(data.index, index=data['Title']).drop_duplicates()
 #indices['Stillwater']
 #sim_scores = list(enumerate(cosine_sim[indices['Stillwater']]))
 def get_recommendations(title, cosine_sim=cosine_sim):
     idx = indices[title]
-    # Get the pairwsie similarity scores of all movies with that movie
+    # Get the pairwise similarity scores of all movies with that movie
     sim_scores = list(enumerate(cosine_sim[idx]))
     # Sort the movies based on the similarity score
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
@@ -63,7 +72,7 @@ def get_recommendations(title, cosine_sim=cosine_sim):
     final_df.reset_index(drop=True,inplace=True)
     return final_df
 
-
+# Test our recommendation engine
 get_recommendations('Spider-Man: Far from Home')
 #Stillwater
 get_recommendations('Stillwater')
