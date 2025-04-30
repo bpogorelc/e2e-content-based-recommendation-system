@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filmrecommendationsystem
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: film
+  template:
+    metadata:
+      labels:
+        app: film
+    spec:
+      containers:
+      - name: filmrs
+        image: gcr.io/stellar-market-458417-c5/film-recommendation-system
+        ports:
+        - containerPort: 8501
